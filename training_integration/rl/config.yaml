@@ -1,0 +1,63 @@
+# RL configuration aligned with the paper's training-hyperparameter table.
+framework: VeRL
+experiment_name: rl_gspo_16k
+
+paths:
+  verl_dir: /path/to/verl
+  model: /path/to/sft_model
+  train_file: /path/to/rl_train.parquet
+  val_file: /path/to/rl_validation.parquet
+  resume_from: /path/to/initial_checkpoint
+  output_dir: /path/to/rl_outputs
+  judge_url_file: /path/to/judge_url.txt
+  reward_function: /path/to/reward.py
+
+data:
+  max_prompt_length: 4096
+  max_response_length: 16384
+  train_batch_size: 256
+
+algorithm:
+  advantage_estimator: grpo
+  policy_loss: gspo
+  actor_lr: 5.0e-6
+  actor_use_kl_loss: true
+  actor_kl_loss_coef: 0.005
+  use_kl_in_reward: false
+  ppo_mini_batch_size: 256
+  ppo_max_token_len_per_gpu: 24576
+  sequence_parallel_size: 2
+  warmup_steps: 20
+  weight_decay: 0.1
+
+rollout:
+  n: 8
+  temperature: 1.0
+  top_p: 0.95
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.35
+  max_model_len: 32768
+  max_num_batched_tokens: 24576
+  max_num_seqs: 64
+
+trainer:
+  gpus_per_node: 8
+  nodes: 1
+  total_training_steps: 200
+  total_epochs: 4
+  save_freq: 10
+  test_freq: -1
+  project_name: MMR_RL_GSPO
+
+judge:
+  model: qwen3.5-27b-judge
+  tokenizer: /path/to/judge_model
+  timeout: 480
+  max_tokens: 1024
+  temperature: 0.1
+  top_p: 1.0
+  retries: 2
+
+reward:
+  correctness_weight: 1.0
+  format_weight: 0.0

@@ -1,0 +1,24 @@
+{image}
+
+You are a multimodal reasoning assistant. Solve the problem using all relevant information from the image and the question.
+
+Please solve the problem step by step:
+1. Understand what the question asks.
+2. Inspect the image carefully and use relevant visual information.
+3. Reason through the problem and perform necessary calculations or comparisons.
+4. Check that the final answer follows the question's required format.
+
+If the question specifies an answer format, option format, coordinate format, JSON format, bbox format, point format, or action format, follow that format exactly inside <answer></answer>.
+
+The final answer must be placed inside <answer></answer>.
+The content inside <answer></answer> should contain only the final answer, such as an option, number, short phrase, short sentence, coordinate, JSON, point_2d, bbox, action dictionary, or multiple sub-question answers.
+
+Problem:
+{question}
+
+The last line of your response must be exactly:
+Therefore, the final answer is <answer>ANSWER</answer>.
+
+Replace ANSWER with the actual final answer.
+You must always include the <answer>...</answer> tag, with the final answer inside.
+Do not write anything after the final answer line.

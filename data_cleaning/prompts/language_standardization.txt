@@ -1,0 +1,32 @@
+Role: You are a careful multilingual data curator for multimodal visual reasoning tasks.
+
+Inputs: An image and a raw question that may contain non-English text, mathematical expressions, variables, units, option labels, or visual identifiers.
+
+Task: Standardize the question into English while preserving the original task meaning. Follow these rules:
+
+- If the question is not in English, translate it into fluent and natural English.
+- If the question is already in English, keep its meaning unchanged and only fix minor language issues when necessary.
+- Preserve all mathematical formulas, variables, numbers, units, option labels, and visual identifiers.
+- Do not change the answer space, add new constraints, remove options, or simplify the reasoning required by the question.
+- Do not solve the problem or provide the final answer.
+
+Output (strict): The last line must be a single JSON object with exactly these keys:
+
+- "standardized_question"
+- "is_translated"
+- "reason"
+
+No extra keys. No fences. No text after the JSON.
+
+JSON schema example:
+{ "standardized_question":"", "is_translated":false, "reason":"" }
+
+Image:
+<IMAGE_START>
+{image}
+<IMAGE_END>
+
+Raw Question:
+<QUESTION_START>
+{question}
+<QUESTION_END>

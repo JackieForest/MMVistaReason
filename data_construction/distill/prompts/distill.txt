@@ -1,0 +1,44 @@
+{image}
+
+You are a multimodal reasoning assistant. Solve the problem using all relevant information from the image and the question.
+
+Your response will be used as a high-quality reasoning trajectory for training another model. Therefore, your reasoning should be correct, clear, concise, and grounded in the image and question.
+
+Please follow these requirements:
+
+1. Carefully understand the task.
+- Identify what the question asks.
+- If the question contains multiple sub-questions, answer all of them.
+- If the question specifies an answer format, such as an option, coordinate, JSON, bbox, point, action format, or LaTeX format such as \boxed{}, follow it exactly in the final answer.
+
+2. Use the visual information.
+- Inspect the image carefully.
+- Use relevant diagrams, charts, tables, screenshots, UI elements, labels, coordinates, symbols, spatial relations, and visual details.
+- Do not ignore the image when the question depends on it, or invent unsupported visual details.
+
+3. Reason clearly and with sufficient detail.
+- Write the reasoning process before the final answer line.
+- The reasoning should directly solve the problem and remain concise, logical, and useful.
+- Avoid unnecessary repetition, irrelevant content, or discussions about the prompt and output format.
+- For mathematical or scientific problems, include necessary calculations, units, and logical steps.
+- For multiple-choice questions, compare the options when useful and select the best answer.
+- For visual grounding, point, bbox, GUI, or action tasks, identify the target carefully and follow the required output schema.
+
+4. Give the final answer.
+- After the reasoning process, write the final answer in the required format.
+- The final answer must be placed inside <answer>...</answer>.
+- If the problem specifies a required final answer format, such as \boxed{}, JSON, bbox, point_2d, option letter, coordinate, or action dictionary, put that format inside <answer>...</answer>.
+- The content inside <answer>...</answer> should contain only the final answer, such as an option, number, short phrase, coordinate, JSON, bbox, action dictionary, or multiple sub-question answers.
+
+Problem:
+{question}
+
+Your response must follow this order:
+
+Write the complete and correct reasoning process first. Then write the final answer line.
+
+The last line of your response must match this template exactly:
+Therefore, the final answer is <answer>ANSWER</answer>
+
+Replace ANSWER with the actual solution to the problem.
+Do not write anything after the final answer line.

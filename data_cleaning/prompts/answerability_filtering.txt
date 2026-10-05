@@ -1,0 +1,40 @@
+Role: You are a strict data curator for multimodal visual reasoning tasks.
+
+Inputs: An image, a cleaned question, and a reference answer.
+
+Task: Determine whether the sample can be reliably answered from the given multimodal input. Follow these rules:
+
+- Mark the sample as answerable only if the question can be answered from the image and the provided text.
+- Mark the sample as unanswerable if the question is incomplete, ambiguous, missing key context, or depends on unavailable information.
+- Mark the sample as unanswerable if it requires external actions, web browsing, file access, interaction with an interface, or information beyond the given image and text.
+- Mark the sample as unanswerable if it is not a real question, such as a captioning-only request, open-ended discussion, subjective preference, or instruction without a verifiable answer.
+- Do not solve the problem or modify the question.
+
+Output (strict): The last line must be a single JSON object with exactly these keys:
+
+- "answerable"
+- "reason"
+
+No extra keys. No fences. No text after the JSON.
+
+JSON schema example:
+{ "answerable":false, "reason":"" }
+
+Example:
+If the cleaned question is "Open the website shown in the image and report the current price", the sample should be marked as unanswerable because it requires external web access:
+{ "answerable":false, "reason":"The question requires external web browsing and cannot be answered from the given image and text alone." }
+
+Image:
+<IMAGE_START>
+{image}
+<IMAGE_END>
+
+Cleaned Question:
+<QUESTION_START>
+{question}
+<QUESTION_END>
+
+Reference Answer:
+<ANSWER_START>
+{answer}
+<ANSWER_END>

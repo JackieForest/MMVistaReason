@@ -1,0 +1,64 @@
+# Qwen3.5-122B-A10B data-cleaning rollout configuration.
+# Replace the input/output placeholders before launching.
+
+name: qwen35_122b_data_cleaning
+task: data_cleaning_rollout
+
+source_data: /path/to/data_cleaning_input.parquet
+data_dir: /path/to/data_cleaning_output
+output_dir: /path/to/data_cleaning_output
+hf_datasets_cache_dir: /path/to/data_cleaning_output/hf_datasets_cache
+
+num_splits: 100
+
+model: /path/to/Qwen3.5-122B-A10B
+prompt: prompts/data_cleaning.placeholder
+use_image: true
+enable_thinking: false
+
+rollouts_per_sample: 4
+temperature: 0.7
+top_p: 0.95
+top_k: 20
+min_p: 0.0
+presence_penalty: 1.5
+repetition_penalty: 1.0
+max_tokens: 16384
+max_retries: 3
+request_timeout: 1800
+max_concurrent: 4
+max_pending_multiplier: 1
+
+success_dir_name: rollouts
+failed_dir_name: failed_rollouts
+valid_key: rollout_valid
+
+split_workers: 4
+split_arrow_threads: 2
+
+vllm:
+  container: /path/to/vllm.sif
+  pythonpath: /path/to/vllm_extra
+  runtime_cache_root: /path/to/data_cleaning_output/runtime_cache
+  max_model_len: 49152
+  tensor_parallel_size: 4
+  max_num_seqs: 8
+  gpu_memory_utilization: 0.96
+  gpu_min_free_gb: 40
+  startup_timeout: 1200
+  base_port: 9900
+  clean_process: true
+  enable_expert_parallel: false
+  enforce_eager: true
+  async_scheduling: true
+  enable_chunked_prefill: true
+
+slurm:
+  partition: gpu
+  quota_type: spot
+  reserved_min_running: 80
+  reserved_quota_type: reserved
+  spot_quota_type: spot
+  gpus: 4
+  time: 43200
+  exclude: ""

@@ -1,0 +1,76 @@
+# MOPD template using Forward KL on the teacher-selected top-K support.
+framework: VeRL
+experiment_name: mopd_forward_kl_16k
+
+paths:
+  verl_dir: /path/to/verl_mopd
+  student_model: /path/to/student_model
+  train_file: /path/to/mopd_train.parquet
+  val_file: /path/to/mopd_validation.parquet
+  output_dir: /path/to/mopd_forward_kl_outputs
+  reward_function: /path/to/MMVistaReason/training_integration/mopd/zero_reward.py
+
+data:
+  teacher_key: opd_teacher
+  max_prompt_length: 4096
+  max_response_length: 16384
+  global_batch_size: 256
+
+student:
+  gpus: 4
+  ppo_mini_batch_size: 256
+  ppo_max_token_len_per_gpu: 24576
+  sequence_parallel_size: 2
+
+teachers:
+  - name: analytical_teacher
+    routing_key: analytical
+    model: /path/to/analytical_teacher_model
+    gpus: 2
+    tensor_parallel_size: 2
+    num_replicas: 1
+  - name: real_world_teacher
+    routing_key: real_world
+    model: /path/to/real_world_teacher_model
+    gpus: 2
+    tensor_parallel_size: 2
+    num_replicas: 1
+
+rollout:
+  n: 2
+  temperature: 1.0
+  top_p: 0.95
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.35
+  max_model_len: 32768
+  max_num_batched_tokens: 24576
+  max_num_seqs: 64
+
+teacher_inference:
+  gpu_memory_utilization: 0.55
+  max_model_len: 32768
+  max_num_batched_tokens: 24576
+  max_num_seqs: 64
+
+distillation:
+  enabled: true
+  loss_mode: forward_kl_topk
+  top_k: 32
+  use_task_rewards: false
+  use_policy_gradient: false
+  use_chunked_topk: true
+  chunk_size: 2048
+
+optimizer:
+  learning_rate: 5.0e-7
+  weight_decay: 0.1
+  warmup_steps: 20
+  scheduler: constant
+
+trainer:
+  nodes: 1
+  training_steps: 300
+  epochs: 4
+  save_frequency: 10
+  test_frequency: -1
+  project_name: MVR_MOPD

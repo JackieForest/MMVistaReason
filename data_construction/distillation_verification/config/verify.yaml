@@ -1,0 +1,50 @@
+# Qwen3.5-27B trajectory verifier shared by all three distillation stages.
+# The active input/output paths below currently select the 9B rollout stage.
+name: qwen35_27b_distillation_verification_for_9b
+task: distillation_trajectory_verification
+
+# Read-only distill outputs. These files are not modified by this project.
+input_rollout_dir: /path/to/qwen35_9b_distill/rollouts
+# input_rollout_dir: /path/to/qwen35_27b_distill/rollouts
+# input_rollout_dir: /path/to/qwen35_122b_distill/rollouts
+
+# Verification outputs are written under this directory.
+output_dir: /path/to/qwen35_9b_distill
+# output_dir: /path/to/qwen35_27b_distill
+# output_dir: /path/to/qwen35_122b_distill
+success_dir_name: verify_response
+failed_dir_name: failed_verify_response
+stop_dir_name: verify_response_stop_files
+# Use 400 for 9B/27B and 100 for the original 122B split layout.
+num_splits: 400
+expected_rollouts: 4
+
+verifier_model: /path/to/Qwen3.5-27B
+candidate_field: response
+fallback_candidate_field: response
+
+batch_size: 64
+max_model_len: 32768
+max_tokens: 512
+temperature: 0.000001
+top_p: 0.9
+top_k: 1
+gpu_memory_utilization: 0.85
+enforce_eager: true
+
+vllm:
+  container: /path/to/vllm.sif
+  runtime_cache_root: /path/to/qwen35_9b_distill/verify_runtime_cache
+  # runtime_cache_root: /path/to/qwen35_27b_distill/verify_runtime_cache
+  # runtime_cache_root: /path/to/qwen35_122b_distill/verify_runtime_cache
+  tensor_parallel_size: 2
+
+slurm:
+  partition: gpu
+  quota_type: spot
+  reserved_min_running: 120
+  reserved_quota_type: reserved
+  spot_quota_type: spot
+  gpus: 2
+  time: 43200
+  exclude: "SH-IDCA1404-10-140-54-67,SH-IDCA1404-10-140-54-3,SH-IDCA1404-10-140-54-116"

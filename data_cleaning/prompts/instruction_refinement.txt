@@ -1,0 +1,37 @@
+Role: You are a careful data curator for multimodal visual reasoning tasks.
+
+Inputs: An image and a cleaned question that may contain low-quality meta-instructions.
+
+Task: Refine the question instruction while preserving the original task semantics. Follow these rules:
+
+- If the question contains instructions that may reduce reasoning quality, rewrite them into instructions that encourage thoughtful reasoning.
+- Examples of low-quality instructions include "just give the answer", "do not think", "give me the final answer only", or similar phrases.
+- Replace such instructions with reasoning-friendly guidance, such as "provide a clear reasoning process before the final answer".
+- Preserve the original visual reasoning task, answer space, formulas, variables, numbers, units, option labels, and constraints.
+- Do not add new task requirements, change the question meaning, remove necessary information, or solve the problem.
+
+Output (strict): The last line must be a single JSON object with exactly these keys:
+
+- "refined_question"
+- "has_low_quality_instruction"
+- "rewritten_instruction"
+- "reason"
+
+No extra keys. No fences. No text after the JSON.
+
+JSON schema example:
+{ "refined_question":"", "has_low_quality_instruction":false, "rewritten_instruction":"", "reason":"" }
+
+Example:
+If the cleaned question is "Please directly answer the question: what are the roots of this equation?", the low-quality meta-instruction should be rewritten to encourage reasoning:
+{ "refined_question":"Please provide a clear reasoning process before giving the roots of this equation.", "has_low_quality_instruction":true, "rewritten_instruction":"Please directly answer the question", "reason":"The original instruction discourages reasoning, so it is replaced with reasoning-friendly guidance while preserving the task meaning." }
+
+Image:
+<IMAGE_START>
+{image}
+<IMAGE_END>
+
+Cleaned Question:
+<QUESTION_START>
+{question}
+<QUESTION_END>

@@ -1,0 +1,55 @@
+# 8 GPUs, Qwen3.5-9B-Base, cutoff_len=16384; default dataset: 528K
+### model
+model_name_or_path: /path/to/Qwen3.5-9B-Base
+image_max_pixels: 589824
+image_min_pixels: 1024
+video_max_pixels: 16384
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+deepspeed: /path/to/LlamaFactory/examples/deepspeed/ds_z2_config.json
+
+### dataset
+dataset_dir: /path/to/sft_data
+# Available datasets (when switching, also update tokenized_path and output_dir):
+#   49K:  qwen35_122b_distill_sft_49k
+#   124K: qwen35_27b_distill_sft_124k
+#   355K: qwen35_9b_distill_sft_355k
+#   528K: qwen35_full_distill_528k
+dataset: qwen35_full_distill_528k
+template: qwen3_5
+packing: true
+cutoff_len: 16384
+max_samples: 10000000
+tokenized_path: /path/to/sft_outputs/tokenized_data/qwen35_9b_base_full_distill_sft_528k_16k
+hf_hub_token: ""
+
+preprocessing_num_workers: 32
+dataloader_num_workers: 4
+
+### output
+output_dir: /path/to/sft_outputs/models/qwen35_9b_base_full_distill_sft_528k_16k
+logging_steps: 10
+save_strategy: epoch
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: none
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 4
+learning_rate: 1.0e-5
+num_train_epochs: 2.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 1800000000
+resume_from_checkpoint: null
+flash_attn: fa2
+seed: 42
+enable_liger_kernel: true
+gradient_checkpointing: true

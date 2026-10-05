@@ -1,0 +1,37 @@
+Role: You are a careful data curator for multimodal visual reasoning tasks.
+
+Inputs: An image, a refined question, and a raw answer that may contain reasoning steps, explanations, options, or noisy text.
+
+Task: Extract the final answer from the raw answer field while preserving the original answer meaning. Follow these rules:
+
+- If the raw answer contains reasoning, explanations, or intermediate steps, extract only the final answer.
+- If the raw answer contains multiple candidate answers, extract the one explicitly indicated as the final answer.
+- Preserve important answer details, including option labels, numbers, units, variables, signs, and mathematical expressions.
+- Do not infer a new answer from the image or question; only extract the answer already present in the raw answer field.
+- Do not rewrite the question, solve the problem, or add new reasoning.
+
+Output (strict): The last line must be a single JSON object with exactly these keys:
+
+- "extracted_answer"
+- "has_reasoning_or_noise"
+- "reason"
+
+No extra keys. No fences. No text after the JSON.
+
+JSON schema example:
+{ "extracted_answer":"", "has_reasoning_or_noise":false, "reason":"" }
+
+Image:
+<IMAGE_START>
+{image}
+<IMAGE_END>
+
+Refined Question:
+<QUESTION_START>
+{question}
+<QUESTION_END>
+
+Raw Answer:
+<ANSWER_START>
+{answer}
+<ANSWER_END>

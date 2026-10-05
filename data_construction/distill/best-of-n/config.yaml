@@ -1,0 +1,53 @@
+name: qwen35_9b_best_of_n
+task: answer_likelihood_best_of_n
+
+input_splits_dir: /path/to/qwen35_9b_distill/final_splits
+input_rollouts_dir: /path/to/qwen35_9b_distill/rollouts
+output_dir: /path/to/qwen35_9b_distill/best_rollouts
+hf_datasets_cache_dir: /path/to/qwen35_9b_distill/best_rollouts/hf_datasets_cache
+
+num_splits: 400
+num_shards: 10
+
+# Select the same model used to generate the candidate rollouts.
+model: /path/to/Qwen3.5-9B
+# model: /path/to/Qwen3.5-27B
+# model: /path/to/Qwen3.5-122B-A10B
+
+# Matching TP/GPU presets: 9B=1, 27B=2, 122B=4.
+prompt: ../prompts/distill.txt
+use_image: true
+
+request_timeout: 1800
+max_retries: 3
+max_concurrent: 16
+score_top_logprobs: 1
+rollouts_per_sample: 4
+selection_method: normalized_answer_likelihood
+
+vllm:
+  container: /path/to/vllm.sif
+  pythonpath: /path/to/vllm_extra
+  runtime_cache_root: /path/to/qwen35_9b_distill/best_rollouts/runtime_cache
+  max_model_len: 64000
+  tensor_parallel_size: 1
+  max_num_seqs: 64
+  gpu_memory_utilization: 0.90
+  gpu_min_free_gb: 30
+  startup_timeout: 600
+  base_port: 15900
+  clean_process: true
+  enable_expert_parallel: false
+  enforce_eager: true
+  async_scheduling: true
+  enable_chunked_prefill: true
+
+slurm:
+  partition: gpu
+  quota_type: spot
+  reserved_min_running: 0
+  reserved_quota_type: reserved
+  spot_quota_type: spot
+  gpus: 1
+  time: 43200
+  exclude: "SH-IDCA1404-10-140-54-4,SH-IDCA1404-10-140-54-8,SH-IDCA1404-10-140-54-101,SH-IDCA1404-10-140-54-116,SH-IDCA1404-10-140-54-113,SH-IDC1-10-140-37-35,SH-IDC1-10-140-37-4,SH-IDC1-10-140-37-47"

@@ -1,0 +1,36 @@
+Role: You are a strict data curator for multimodal visual reasoning tasks.
+
+Inputs: An image and a standardized question that may contain unrelated or distracting content.
+
+Task: Remove irrelevant content from the question while preserving the original task meaning. Follow these rules:
+
+- Remove unrelated links, advertisements, watermarks, source notes, problem indices, score annotations, and irrelevant metadata.
+- Remove boilerplate instructions that are not necessary for answering the visual reasoning question.
+- Preserve all task-relevant information, including formulas, variables, numbers, units, option labels, visual identifiers, and constraints.
+- Do not remove content that is necessary to understand or answer the question.
+- Do not solve the problem or provide the final answer.
+
+Output (strict): The last line must be a single JSON object with exactly these keys:
+
+- "error type"
+- "corrected text"
+- "reason"
+
+The value of "error type" should be a list. If no irrelevant content is found, return an empty list and keep the original question as "corrected text". No extra keys. No fences. No text after the JSON.
+
+JSON schema example:
+{ "error type":[], "corrected text":"", "reason":"" }
+
+Example:
+If the standardized question is "What is this? https://example.com", remove the unrelated link:
+{ "error type":["irrelevant content"], "corrected text":"What is this?", "reason":"The URL is unrelated to the visual reasoning question and is removed." }
+
+Image:
+<IMAGE_START>
+{image}
+<IMAGE_END>
+
+Standardized Question:
+<QUESTION_START>
+{question}
+<QUESTION_END>

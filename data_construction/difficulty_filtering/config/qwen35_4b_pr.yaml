@@ -1,0 +1,66 @@
+# Qwen3.5-4B rollout config.
+# One split job uses one GPU and produces four independent rollouts per sample.
+
+name: qwen35_4b_pr
+task: thinking_rollout
+
+source_data: /path/to/qwen35_4b_pr/splits/Pool.parquet
+data_dir: /path/to/qwen35_4b_pr
+output_dir: /path/to/qwen35_4b_pr
+hf_datasets_cache_dir: /path/to/qwen35_4b_pr/hf_datasets_cache
+num_splits: 100
+
+model: /path/to/Qwen3.5-4B
+prompt: prompts/qwen35_4b_rollout.txt
+use_image: true
+enable_thinking: false
+rollouts_per_sample: 4
+
+# Sampling for general tasks.
+temperature: 1.0
+top_p: 0.95
+top_k: 20
+min_p: 0.0
+presence_penalty: 1.5
+repetition_penalty: 1.0
+max_tokens: 16384
+max_retries: 3
+request_timeout: 600
+
+# This is sample-level concurrency; each sample performs four separate requests.
+max_concurrent: 16
+max_pending_multiplier: 1
+
+success_dir_name: rollouts
+failed_dir_name: failed_rollouts
+valid_key: rollout_valid
+
+split_workers: 8
+split_arrow_threads: 2
+
+vllm:
+  container: /path/to/vllm.sif
+  pythonpath: /path/to/vllm_extra
+  runtime_cache_root: /path/to/qwen35_4b_pr/runtime_cache
+  max_model_len: 20000
+  tensor_parallel_size: 1
+  max_num_seqs: 64
+  gpu_memory_utilization: 0.90
+  gpu_min_free_gb: 20
+  startup_timeout: 600
+  base_port: 9300
+  clean_process: true
+  enable_expert_parallel: false
+  enforce_eager: true
+  async_scheduling: true
+  enable_chunked_prefill: true
+
+slurm:
+  partition: gpu
+  quota_type: spot
+  reserved_min_running: 40
+  reserved_quota_type: reserved
+  spot_quota_type: spot
+  gpus: 1
+  time: 43200
+  exclude: "SH-IDCA1404-10-140-54-101"
