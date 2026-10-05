@@ -9,8 +9,9 @@ MMVistaReason (MVR) is an open-data and post-training recipe for building reliab
 The recipes produce a 528K supervised fine-tuning corpus and a 63K reinforcement-learning corpus covering both real-world and analytical visual reasoning at the 4B and 9B model scales.
 
 <p align="center">
-  <a href="https://github.com/JackieForest/MMVistaReason">Code</a> |
-  <a href="https://huggingface.co/collections/JackieLin0123/mmvistareason">Hugging Face Collection</a> |
+  <a href="https://arxiv.org/pdf/2610.01352">📄 Paper</a> |
+  <a href="https://huggingface.co/collections/JackieLin0123/mmvistareason">🤗 Hugging Face Collection</a> |
+  <a href="https://github.com/JackieForest/MMVistaReason">💻 Code</a>
 </p>
 
 ## Highlights
