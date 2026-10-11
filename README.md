@@ -94,9 +94,10 @@ If you find this project useful, please cite:
 
 ```bibtex
 @article{lin2026mmvistareason,
-  title   = {MMVistaReason: Toward Open-Data and Post-Training Recipes for Multimodal Reasoning},
-  author  = {Lin, Juekai and Lin, Honglin and Yuan, Yuqian and Wu, Xiaolong and Cao, Jie and Liang, Liang and Cao, Yunqi and Zhu, Yun and Zhang, Wenqiao and Wu, Lijun},
-  year    = {2026}
+  title={MMVistaReason: Toward Open-Data and Post-Training Recipes for Multimodal Reasoning},
+  author={Lin, Juekai and Lin, Honglin and Yuan, Yuqian and Wu, Xiaolong and Cao, Jie and Liang, Liang and Cao, Yunqi and Zhu, Yun and Zhang, Wenqiao and Wu, Lijun},
+  journal={arXiv preprint arXiv:2610.01352},
+  year={2026}
 }
 ```
 
